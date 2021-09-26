@@ -83,14 +83,17 @@ export class MxGraphAdapter {
   }
 
   private _handlePotentiallyNewCell(cell: mxCell): void {
-    if (!cell.id) {
-      const id = MxGraphAdapter._generateId();
-      this._mxGraph.model.cells[id] = cell;
-      cell.id = id;
+    if (! cell.id) {
+	  const id = MxGraphAdapter._generateId();
+	  this._mxGraph.model.cells[id] = cell;
+	  cell.id = id;
+    }
+
+    if (! this._cellAdapters.has(cell)) {
       const cellJson = Serializer.serializeMxCell(cell);
       const rtCell = this._rtCells.set(cell.id, cellJson) as RealTimeObject;
       this._bindMxCellAdapter(cell, rtCell);
-    }
+	}
   }
 
   private _handleLocalCellsRemoved(evt: IMxCellsRemoved): void {
