@@ -137,7 +137,11 @@ export class MxGraphAdapter {
     } else if (change instanceof mxChildChange) {
       this._processLocalChildChange(change);
     } else if (change.cell != null && change.cell.id != null) {
-      const adapter = this._cellAdapters.get(change.cell);
+      var adapter = this._cellAdapters.get(change.cell);
+      if (!adapter) {
+        this._handlePotentiallyNewCell(change.cell);
+        adapter = this._cellAdapters.get(change.cell);
+      }
       adapter.processChange(change);
     }
   }
